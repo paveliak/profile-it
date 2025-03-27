@@ -4,6 +4,6 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
     - uses: paveliak/profile-it@main

@@ -25683,21 +25683,27 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(7484));
+const child = __importStar(__nccwpck_require__(5317));
 const fs = __importStar(__nccwpck_require__(9896));
 const os = __importStar(__nccwpck_require__(857));
 const path = __importStar(__nccwpck_require__(6928));
 const run = () => {
-    /*
     if (process.platform !== "darwin") {
-    throw new Error(
-      `This task is intended only for macOS platform. It can't be run on '${process.platform}' platform`,
-    );
-  }
-*/
+        throw new Error(`This task is intended only for macOS platform. It can't be run on '${process.platform}' platform`);
+    }
     const profileTemplate = core.getInput("template", { required: true });
     const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "profile-it"));
     const logFile = path.join(tmpDir, "trace.log");
-    core.info(`xcrun xctrace record --template "${profileTemplate}" --all-processes --output "${tmpDir}" >> "${logFile}" & 2>&1`);
+    core.info(`xcrun xctrace record --template '${profileTemplate}' --all-processes --output '${tmpDir}' >> '${logFile}' & 2>&1`);
+    const out = fs.openSync(logFile, "a");
+    const err = fs.openSync(logFile, "a");
+    const xctrace = child.spawn("xcrun", ["xctrace", "record", "--template", profileTemplate, "--all-processes", "--output", tmpDir], {
+        detached: true,
+        stdio: ["ignore", out, err],
+    });
+    xctrace.unref();
+    core.info(`Spawned xctrace with pid ${xctrace.pid}`);
+    core.exportVariable("XTRACE_PID", xctrace.pid);
 };
 run();
 
