@@ -1,0 +1,12 @@
+name: "Profile-It"
+description: "Collects performance profile for a macOS job"
+inputs:
+  template:
+    description: "Profile template"
+    required: true
+    default: "Activity Monitor"
+runs:
+  using: 'node20'
+  main: 'dist/initialize/index.js'
+  post: 'dist/finalize/index.js'
+  post-if: "success()"
