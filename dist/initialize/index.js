@@ -25697,7 +25697,7 @@ const run = () => {
     core.info(`xcrun xctrace record --template "${profileTemplate}" --all-processes --output '${tmpDir}' >> '${logFile}' & 2>&1`);
     const out = fs.openSync(logFile, "a");
     const err = fs.openSync(logFile, "a");
-    const xctrace = child.spawn("xcrun", ["xctrace", "record", "--template", '"${profileTemplate}"', "--all-processes", "--output", tmpDir], {
+    const xctrace = child.spawn("xcrun", ["xctrace", "record", "--template", profileTemplate, "--all-processes", "--output", tmpDir], {
         detached: true,
         stdio: ["ignore", out, err],
     });
