@@ -31,7 +31,7 @@ const run = (): void => {
         },
     );
 
-    //xctrace.unref();
+    xctrace.unref();
 
     core.info(`Spawned xctrace with pid ${xctrace.pid}`);
 

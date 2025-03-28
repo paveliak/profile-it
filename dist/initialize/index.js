@@ -25701,7 +25701,7 @@ const run = () => {
         detached: true,
         stdio: ["ignore", out, err],
     });
-    //xctrace.unref();
+    xctrace.unref();
     core.info(`Spawned xctrace with pid ${xctrace.pid}`);
     core.saveState("xtraceProcess", xctrace);
     core.saveState("xtraceLog", logFile);
