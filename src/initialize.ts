@@ -16,7 +16,7 @@ const run = (): void => {
     const logFile = path.join(tmpDir, "trace.log");
 
     core.info(
-        `xcrun xctrace record --template '"${profileTemplate}"' --all-processes --output '${tmpDir}' >> '${logFile}' & 2>&1`,
+        `xcrun xctrace record --template "${profileTemplate}" --all-processes --output '${tmpDir}' >> '${logFile}' & 2>&1`,
     );
 
     const out = fs.openSync(logFile, "a");
@@ -31,7 +31,7 @@ const run = (): void => {
         },
     );
 
-    xctrace.unref();
+    //xctrace.unref();
 
     core.info(`Spawned xctrace with pid ${xctrace.pid}`);
 
