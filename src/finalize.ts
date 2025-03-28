@@ -1,7 +1,9 @@
 import * as core from "@actions/core";
 
 const run = (): void => {
-    core.info(`kill -INT ${process.env.XTRACE_PID}`);
+    const xtrace = JSON.parse(core.getState("xtraceProcess"))
+    core.info(`kill -INT ${xtrace.pid}`);
+    xtrace.kill('SIGINT');
 };
 
 run();

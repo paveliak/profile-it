@@ -25684,7 +25684,9 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(7484));
 const run = () => {
-    core.info(`kill -INT ${process.env.XTRACE_PID}`);
+    const xtrace = JSON.parse(core.getState("xtraceProcess"));
+    core.info(`kill -INT ${xtrace.pid}`);
+    xtrace.kill('SIGINT');
 };
 run();
 
