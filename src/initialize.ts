@@ -36,6 +36,7 @@ const run = (): void => {
     core.info(`Spawned xctrace with pid ${xctrace.pid}`);
 
     core.saveState("xtraceProcess", xctrace);
+    core.saveState("xtraceLog", logFile);
 };
 
 run();
