@@ -25690,11 +25690,10 @@ const path = __importStar(__nccwpck_require__(6928));
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
-function waitOutput(pattern) {
-    const logFile = core.getState('xtraceLog');
-    core.info(`Awaiting "${pattern}" in "${logFile}"`);
+function waitOutput(pattern, file) {
+    core.info(`Awaiting "${pattern}" in "${file}"`);
     while (true) {
-        const log = fs.readFileSync(logFile, 'utf8');
+        const log = fs.readFileSync(file, 'utf8');
         if (log.indexOf(pattern) != -1) {
             break;
         }
@@ -25719,7 +25718,7 @@ const run = () => {
     core.info(`Spawned xctrace with pid ${xctrace.pid}`);
     core.saveState("xtracePid", xctrace.pid);
     core.saveState("xtraceLog", logFile);
-    waitOutput("Ctrl-C to stop the recording");
+    waitOutput("Ctrl-C to stop the recording", logFile);
 };
 run();
 

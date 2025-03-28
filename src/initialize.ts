@@ -8,11 +8,10 @@ function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function waitOutput(pattern: string) {
-    const logFile = core.getState('xtraceLog')
-    core.info(`Awaiting "${pattern}" in "${logFile}"`);
+function waitOutput(pattern: string, file: string) {
+    core.info(`Awaiting "${pattern}" in "${file}"`);
     while (true) {
-        const log = fs.readFileSync(logFile, 'utf8')
+        const log = fs.readFileSync(file, 'utf8')
         if (log.indexOf(pattern) != -1) {
             break;
         }
@@ -54,7 +53,7 @@ const run = (): void => {
     core.saveState("xtracePid", xctrace.pid);
     core.saveState("xtraceLog", logFile);
 
-    waitOutput("Ctrl-C to stop the recording");
+    waitOutput("Ctrl-C to stop the recording", logFile);
 };
 
 run();

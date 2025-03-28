@@ -25687,22 +25687,22 @@ const fs = __importStar(__nccwpck_require__(9896));
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
-function waitOutput(pattern) {
-    const logFile = core.getState('xtraceLog');
+function waitOutput(pattern, file) {
+    core.info(`Awaiting "${pattern}" in "${file}"`);
     while (true) {
-        const log = fs.readFileSync(logFile, 'utf8');
+        const log = fs.readFileSync(file, 'utf8');
         if (log.indexOf(pattern) != -1) {
             break;
         }
         sleep(1000);
     }
 }
-const run = async () => {
+const run = () => {
     const xtracePid = core.getState('xtracePid');
     core.info(`kill -INT ${xtracePid}`);
     process.kill(Number(xtracePid), 'SIGINT');
-    waitOutput("Output file saved as:");
     const logFile = core.getState('xtraceLog');
+    waitOutput("Output file saved as:", logFile);
     core.info(fs.readFileSync(logFile, 'utf8'));
 };
 run();
