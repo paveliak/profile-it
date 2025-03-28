@@ -25692,7 +25692,7 @@ const run = async () => {
     const xtrace = JSON.parse(core.getState('xtraceProcess'));
     core.info(`kill -INT ${xtrace.pid}`);
     process.kill(xtrace.pid, 'SIGINT');
-    await sleep(10000);
+    await sleep(30000);
     //child.spawnSync('wait', [xtrace.pid])
     const logFile = core.getState('xtraceLog');
     core.info(fs.readFileSync(logFile, 'utf8'));

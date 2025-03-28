@@ -11,7 +11,7 @@ const run = async (): Promise<void> => {
     core.info(`kill -INT ${xtrace.pid}`);
     process.kill(xtrace.pid, 'SIGINT');
 
-    await sleep(10000)
+    await sleep(30000)
     //child.spawnSync('wait', [xtrace.pid])
 
     const logFile = core.getState('xtraceLog')
