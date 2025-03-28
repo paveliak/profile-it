@@ -25683,17 +25683,25 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(7484));
-//import * as child from "child_process";
 const fs = __importStar(__nccwpck_require__(9896));
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+function waitOutput(pattern) {
+    const logFile = core.getState('xtraceLog');
+    while (true) {
+        const log = fs.readFileSync(logFile, 'utf8');
+        if (log.indexOf(pattern) != -1) {
+            break;
+        }
+        sleep(1000);
+    }
+}
 const run = async () => {
-    const xtrace = JSON.parse(core.getState('xtraceProcess'));
-    core.info(`kill -INT ${xtrace.pid}`);
-    process.kill(xtrace.pid, 'SIGINT');
-    await sleep(30000);
-    //child.spawnSync('wait', [xtrace.pid])
+    const xtracePid = core.getState('xtracePid');
+    core.info(`kill -INT ${xtracePid}`);
+    process.kill(Number(xtracePid), 'SIGINT');
+    waitOutput("Output file saved as:");
     const logFile = core.getState('xtraceLog');
     core.info(fs.readFileSync(logFile, 'utf8'));
 };

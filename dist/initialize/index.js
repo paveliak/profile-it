@@ -25687,6 +25687,19 @@ const child = __importStar(__nccwpck_require__(5317));
 const fs = __importStar(__nccwpck_require__(9896));
 const os = __importStar(__nccwpck_require__(857));
 const path = __importStar(__nccwpck_require__(6928));
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+function waitOutput(pattern) {
+    const logFile = core.getState('xtraceLog');
+    while (true) {
+        const log = fs.readFileSync(logFile, 'utf8');
+        if (log.indexOf(pattern) != -1) {
+            break;
+        }
+        sleep(1000);
+    }
+}
 const run = () => {
     if (process.platform !== "darwin") {
         throw new Error(`This task is intended only for macOS platform. It can't be run on '${process.platform}' platform`);
@@ -25703,8 +25716,9 @@ const run = () => {
     });
     xctrace.unref();
     core.info(`Spawned xctrace with pid ${xctrace.pid}`);
-    core.saveState("xtraceProcess", xctrace);
+    core.saveState("xtracePid", xctrace.pid);
     core.saveState("xtraceLog", logFile);
+    waitOutput("Ctrl-C to stop the recording");
 };
 run();
 

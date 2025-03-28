@@ -4,6 +4,21 @@ import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
 
+function sleep(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function waitOutput(pattern: string) {
+    const logFile = core.getState('xtraceLog')
+    while (true) {
+        const log = fs.readFileSync(logFile, 'utf8')
+        if (log.indexOf(pattern) != -1) {
+            break;
+        }
+        sleep(1000);
+    }
+}
+
 const run = (): void => {
     if (process.platform !== "darwin") {
         throw new Error(
@@ -35,8 +50,10 @@ const run = (): void => {
 
     core.info(`Spawned xctrace with pid ${xctrace.pid}`);
 
-    core.saveState("xtraceProcess", xctrace);
+    core.saveState("xtracePid", xctrace.pid);
     core.saveState("xtraceLog", logFile);
+
+    waitOutput("Ctrl-C to stop the recording");
 };
 
 run();
