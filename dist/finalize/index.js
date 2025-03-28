@@ -25686,7 +25686,7 @@ const core = __importStar(__nccwpck_require__(7484));
 const run = () => {
     const xtrace = JSON.parse(core.getState("xtraceProcess"));
     core.info(`kill -INT ${xtrace.pid}`);
-    xtrace.kill('SIGINT');
+    process.kill(xtrace.pid, 'SIGINT');
 };
 run();
 
