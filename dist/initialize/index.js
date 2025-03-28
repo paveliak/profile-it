@@ -25694,10 +25694,10 @@ const run = () => {
     const profileTemplate = core.getInput("template", { required: true });
     const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "profile-it"));
     const logFile = path.join(tmpDir, "trace.log");
-    core.info(`xcrun xctrace record --template '${profileTemplate}' --all-processes --output '${tmpDir}' >> '${logFile}' & 2>&1`);
+    core.info(`xcrun xctrace record --template '"${profileTemplate}"' --all-processes --output '${tmpDir}' >> '${logFile}' & 2>&1`);
     const out = fs.openSync(logFile, "a");
     const err = fs.openSync(logFile, "a");
-    const xctrace = child.spawn("xcrun", ["xctrace", "record", "--template", profileTemplate, "--all-processes", "--output", tmpDir], {
+    const xctrace = child.spawn("xcrun", ["xctrace", "record", "--template", '"${profileTemplate}"', "--all-processes", "--output", tmpDir], {
         detached: true,
         stdio: ["ignore", out, err],
     });

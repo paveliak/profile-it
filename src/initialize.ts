@@ -16,7 +16,7 @@ const run = (): void => {
     const logFile = path.join(tmpDir, "trace.log");
 
     core.info(
-        `xcrun xctrace record --template '${profileTemplate}' --all-processes --output '${tmpDir}' >> '${logFile}' & 2>&1`,
+        `xcrun xctrace record --template '"${profileTemplate}"' --all-processes --output '${tmpDir}' >> '${logFile}' & 2>&1`,
     );
 
     const out = fs.openSync(logFile, "a");
@@ -24,7 +24,7 @@ const run = (): void => {
 
     const xctrace = child.spawn(
         "xcrun",
-        ["xctrace", "record", "--template", profileTemplate, "--all-processes", "--output", tmpDir],
+        ["xctrace", "record", "--template", '"${profileTemplate}"', "--all-processes", "--output", tmpDir],
         {
             detached: true,
             stdio: ["ignore", out, err],
