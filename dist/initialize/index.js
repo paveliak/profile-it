@@ -25706,6 +25706,7 @@ const run = () => {
     core.info(`Spawned xctrace with pid ${xctrace.pid}`);
     core.saveState("xtracePid", xctrace.pid);
     core.saveState("xtraceLog", logFile);
+    core.saveState("xtraceDir", tmpDir);
     (0, utils_1.waitOutput)("Ctrl-C to stop the recording", logFile);
 };
 run();

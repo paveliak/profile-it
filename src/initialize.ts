@@ -38,6 +38,7 @@ const run = (): void => {
 
     core.saveState("xtracePid", xctrace.pid);
     core.saveState("xtraceLog", logFile);
+    core.saveState("xtraceDir", tmpDir);
 
     waitOutput("Ctrl-C to stop the recording", logFile);
 };
