@@ -16,7 +16,7 @@ const run = async (): Promise<void> => {
     const rootDir = core.getState("xtraceDir")
     const result = await findFilesToUpload(rootDir)
     const client = new artifact.DefaultArtifactClient();
-    await client.uploadArtifact(xtracePid, result.filesToUpload, result.rootDirectory)
+    await client.uploadArtifact("xtrace", result.filesToUpload, result.rootDirectory)
 };
 
 run();
