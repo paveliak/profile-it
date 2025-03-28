@@ -10,6 +10,7 @@ function sleep(ms: number) {
 
 function waitOutput(pattern: string) {
     const logFile = core.getState('xtraceLog')
+    core.info(`Awaiting "${pattern}" in "${logFile}"`);
     while (true) {
         const log = fs.readFileSync(logFile, 'utf8')
         if (log.indexOf(pattern) != -1) {
