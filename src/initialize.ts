@@ -3,21 +3,7 @@ import * as child from "child_process";
 import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
-
-function sleep(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-function waitOutput(pattern: string, file: string) {
-    core.info(`Awaiting "${pattern}" in "${file}"`);
-    while (true) {
-        const log = fs.readFileSync(file, 'utf8')
-        if (log.indexOf(pattern) != -1) {
-            break;
-        }
-        sleep(1000);
-    }
-}
+import { waitOutput } from "./utils";
 
 const run = (): void => {
     if (process.platform !== "darwin") {
