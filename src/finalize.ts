@@ -1,4 +1,5 @@
 import * as core from "@actions/core";
+import * as child from "child_process";
 import * as fs from "fs";
 
 const run = async (): Promise<void> => {
@@ -6,9 +7,7 @@ const run = async (): Promise<void> => {
     core.info(`kill -INT ${xtrace.pid}`);
     process.kill(xtrace.pid, 'SIGINT');
 
-    await new Promise((resolve, _) => {
-        xtrace.on('exit', resolve);
-    });
+    child.spawnSync('wait', [xtrace.pid])
 
     const logFile = core.getState('xtraceLog')
     core.info(fs.readFileSync(logFile, 'utf8'))
