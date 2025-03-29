@@ -16,7 +16,7 @@ const run = (): void => {
     const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "profile-it"));
     const logFile = path.join(tmpDir, "trace.log");
 
-    core.info(
+    core.debug(
         `xcrun xctrace record --template "${profileTemplate}" --all-processes --output '${tmpDir}' >> '${logFile}' & 2>&1`,
     );
 

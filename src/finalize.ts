@@ -10,7 +10,7 @@ const run = async (): Promise<void> => {
         return;
     }
 
-    core.info(`kill -INT ${xtracePid}`);
+    core.debug(`kill -INT ${xtracePid}`);
     process.kill(Number(xtracePid), "SIGINT");
 
     const logFile = core.getState("xtraceLog");
