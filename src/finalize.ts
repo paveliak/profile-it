@@ -6,6 +6,10 @@ import { findFilesToUpload } from "./search";
 
 const run = async (): Promise<void> => {
     const xtracePid = core.getState("xtracePid");
+    if (!xtracePid) {
+        return;
+    }
+
     core.info(`kill -INT ${xtracePid}`);
     process.kill(Number(xtracePid), "SIGINT");
 
