@@ -1,5 +1,5 @@
 import * as core from "@actions/core";
-import * as artifact from "@actions/artifact"
+import * as artifact from "@actions/artifact";
 import * as fs from "fs";
 import { waitOutput } from "./utils";
 import { findFilesToUpload } from "./search";
@@ -13,10 +13,11 @@ const run = async (): Promise<void> => {
     waitOutput("Output file saved as:", logFile);
     core.info(fs.readFileSync(logFile, "utf8"));
 
-    const rootDir = core.getState("xtraceDir")
-    const result = await findFilesToUpload(rootDir)
+    const traceName = core.getInput("name", { required: true });
+    const rootDir = core.getState("xtraceDir");
+    const result = await findFilesToUpload(rootDir);
     const client = new artifact.DefaultArtifactClient();
-    await client.uploadArtifact("xtrace", result.filesToUpload, result.rootDirectory)
+    await client.uploadArtifact(traceName, result.filesToUpload, result.rootDirectory);
 };
 
 run();

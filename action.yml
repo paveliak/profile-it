@@ -1,6 +1,10 @@
 name: "Profile-It"
 description: "Collects performance profile for a macOS job"
 inputs:
+  name:
+    description: "Trace name"
+    required: true
+    default: "xtrace"
   template:
     description: "Profile template"
     required: true
