@@ -13,4 +13,3 @@ runs:
   using: 'node20'
   main: 'dist/initialize/index.js'
   post: 'dist/finalize/index.js'
-  post-if: "success()"
