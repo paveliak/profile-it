@@ -104530,7 +104530,6 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(37484));
 const artifact = __importStar(__nccwpck_require__(76846));
-const fs = __importStar(__nccwpck_require__(79896));
 const utils_1 = __nccwpck_require__(71798);
 const search_1 = __nccwpck_require__(78019);
 const run = async () => {
@@ -104540,9 +104539,9 @@ const run = async () => {
     }
     core.debug(`kill -INT ${xtracePid}`);
     process.kill(Number(xtracePid), "SIGINT");
+    core.info(`Waiting for the profiler to shutdown...`);
     const logFile = core.getState("xtraceLog");
-    (0, utils_1.waitOutput)("Output file saved as:", logFile);
-    core.info(fs.readFileSync(logFile, "utf8"));
+    await (0, utils_1.waitOutput)("Output file saved as:", logFile);
     const traceName = core.getInput("name", { required: true });
     const rootDir = core.getState("xtraceDir");
     const result = await (0, search_1.findFilesToUpload)(rootDir);
@@ -104762,18 +104761,18 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.waitOutput = waitOutput;
 const core = __importStar(__nccwpck_require__(37484));
-const fs = __importStar(__nccwpck_require__(79896));
+const fs = __importStar(__nccwpck_require__(91943));
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
-function waitOutput(pattern, file) {
-    core.info(`Awaiting "${pattern}" in "${file}"`);
+async function waitOutput(pattern, file) {
+    core.debug(`Awaiting "${pattern}" in "${file}"`);
     while (true) {
-        const log = fs.readFileSync(file, "utf8");
+        const log = await fs.readFile(file, { encoding: "utf8" });
         if (log.indexOf(pattern) != -1) {
             break;
         }
-        sleep(1000);
+        await sleep(1000);
     }
 }
 
