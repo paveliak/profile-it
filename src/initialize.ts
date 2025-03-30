@@ -40,6 +40,7 @@ const run = (): void => {
     core.saveState("xtraceLog", logFile);
     core.saveState("xtraceDir", tmpDir);
 
+    core.info(`Waiting for the profiler to start...`);
     waitOutput("Ctrl-C to stop the recording", logFile);
 };
 
