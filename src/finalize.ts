@@ -1,6 +1,5 @@
 import * as core from "@actions/core";
 import * as artifact from "@actions/artifact";
-import * as fs from "fs";
 import { waitOutput } from "./utils";
 import { findFilesToUpload } from "./search";
 
@@ -13,9 +12,9 @@ const run = async (): Promise<void> => {
     core.debug(`kill -INT ${xtracePid}`);
     process.kill(Number(xtracePid), "SIGINT");
 
+    core.info(`Waiting for the profiler to shutdown...`);
     const logFile = core.getState("xtraceLog");
-    waitOutput("Output file saved as:", logFile);
-    core.info(fs.readFileSync(logFile, "utf8"));
+    await waitOutput("Output file saved as:", logFile);
 
     const traceName = core.getInput("name", { required: true });
     const rootDir = core.getState("xtraceDir");

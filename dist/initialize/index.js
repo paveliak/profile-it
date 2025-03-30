@@ -25684,30 +25684,31 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(7484));
 const child = __importStar(__nccwpck_require__(5317));
-const fs = __importStar(__nccwpck_require__(9896));
+const fs = __importStar(__nccwpck_require__(1943));
 const os = __importStar(__nccwpck_require__(857));
 const path = __importStar(__nccwpck_require__(6928));
 const utils_1 = __nccwpck_require__(1798);
-const run = () => {
+const run = async () => {
     if (process.platform !== "darwin") {
         throw new Error(`This task is intended only for macOS platform. It can't be run on '${process.platform}' platform`);
     }
     const profileTemplate = core.getInput("template", { required: true });
-    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "profile-it"));
+    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "profile-it"));
     const logFile = path.join(tmpDir, "trace.log");
     core.debug(`xcrun xctrace record --template "${profileTemplate}" --all-processes --output '${tmpDir}' >> '${logFile}' & 2>&1`);
-    const out = fs.openSync(logFile, "a");
-    const err = fs.openSync(logFile, "a");
+    const out = await fs.open(logFile, "a");
+    const err = await fs.open(logFile, "a");
     const xctrace = child.spawn("xcrun", ["xctrace", "record", "--template", profileTemplate, "--all-processes", "--output", tmpDir], {
         detached: true,
-        stdio: ["ignore", out, err],
+        stdio: ["ignore", out.fd, err.fd],
     });
     xctrace.unref();
     core.info(`Spawned xctrace with pid ${xctrace.pid}`);
     core.saveState("xtracePid", xctrace.pid);
     core.saveState("xtraceLog", logFile);
     core.saveState("xtraceDir", tmpDir);
-    (0, utils_1.waitOutput)("Ctrl-C to stop the recording", logFile);
+    core.info(`Waiting for the profiler to start...`);
+    await (0, utils_1.waitOutput)("Ctrl-C to stop the recording", logFile);
 };
 run();
 
@@ -25755,18 +25756,18 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.waitOutput = waitOutput;
 const core = __importStar(__nccwpck_require__(7484));
-const fs = __importStar(__nccwpck_require__(9896));
+const fs = __importStar(__nccwpck_require__(1943));
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
-function waitOutput(pattern, file) {
-    core.info(`Awaiting "${pattern}" in "${file}"`);
+async function waitOutput(pattern, file) {
+    core.debug(`Awaiting "${pattern}" in "${file}"`);
     while (true) {
-        const log = fs.readFileSync(file, "utf8");
+        const log = await fs.readFile(file, { encoding: "utf8" });
         if (log.indexOf(pattern) != -1) {
             break;
         }
-        sleep(1000);
+        await sleep(1000);
     }
 }
 
@@ -25842,6 +25843,14 @@ module.exports = require("events");
 
 "use strict";
 module.exports = require("fs");
+
+/***/ }),
+
+/***/ 1943:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("fs/promises");
 
 /***/ }),
 
