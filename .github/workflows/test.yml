@@ -11,4 +11,5 @@ jobs:
     - run: ps ax
     - run: ls -al /Library/Logs/DiagnosticReports
     - run: ls -al ~/Library/Logs/DiagnosticReports
+    - run: cat /Library/Logs/DiagnosticReports/update_dyld_sim_shared_cache_2025-03-24-053554_Ankas-Virtual-Machine.diag
 
