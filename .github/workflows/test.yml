@@ -4,7 +4,7 @@ on:
 
 jobs:
   test:
-    runs-on: macos-latest
+    runs-on: macos-15
     steps:
     - uses: paveliak/profile-it@main
     - run: sleep 10
