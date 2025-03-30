@@ -6,6 +6,6 @@ jobs:
   test:
     runs-on: macos-latest
     steps:
-    - uses: paveliak/profile-it@mystash
+    - uses: paveliak/profile-it@main
     - run: sleep 10
     - run: ps ax
