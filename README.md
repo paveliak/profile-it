@@ -9,7 +9,7 @@ This actions is intended to profile `macOS` job using [Instruments](https://deve
 
 # Usage
 
-Set the latest stable Xcode version:
+Collect profile using default settings:
 ```
 jobs:
   test:
