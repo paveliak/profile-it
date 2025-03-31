@@ -15,5 +15,5 @@ jobs:
   test:
     runs-on: macos-latest
     steps:
-    - uses: paveliak/profile-it@main
+    - uses: paveliak/profile-it@v1
 ```
