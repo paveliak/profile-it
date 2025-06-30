@@ -1,0 +1,30 @@
+name: Publish release
+on:
+  release:
+    types: [published]
+
+jobs:
+  create:
+    name: Publish release
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      attestations: write
+    steps:
+    - name: Evaluate signing data
+      id: ref
+      run: |
+        echo "Release Tag: $REF"
+        REF_DIGEST=$(echo -n $REF | sha256sum | awk '{print "sha256:" $1}')
+        echo $REF_DIGEST
+        echo "id=$REF" >> $GITHUB_OUTPUT
+        echo "digest=$REF_DIGEST" >> $GITHUB_OUTPUT
+      env:
+        REF: "${{ github.repository }}@${{ github.event.release.tag_name }}"
+      
+    - name: Generate attestation
+      uses: actions/attest-build-provenance@v2
+      with:
+        subject-name: ${{ steps.ref.outputs.id }}
+        subject-digest: ${{ steps.ref.outputs.digest }}
+
